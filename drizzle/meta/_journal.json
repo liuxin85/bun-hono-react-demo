@@ -15,6 +15,13 @@
       "when": 1725016235626,
       "tag": "0001_elite_synch",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1725029063691,
+      "tag": "0002_magenta_hex",
+      "breakpoints": true
     }
   ]
 }

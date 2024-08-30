@@ -6,6 +6,7 @@ import { useForm } from '@tanstack/react-form';
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { api } from '@/lib/api';
 import { createExpenseSchema } from '@server/sharedTypes';
+import { Calendar } from '@/components/ui/calendar';
 
 export const Route = createFileRoute('/_authenticated/create-expense')({
   component: CreateExpense,
@@ -20,6 +21,7 @@ function CreateExpense() {
     defaultValues: {
       title: '',
       amount: '0',
+      date: new Date().toISOString(),
     },
     onSubmit: async ({ value }) => {
       // await new Promise((r) => setTimeout(r, 3000));
@@ -83,6 +85,28 @@ function CreateExpense() {
                 value={field.state.value}
                 onBlur={field.handleBlur}
                 onChange={(e) => field.handleChange(e.target.value)}
+              />
+              {field.state.meta.isTouched && field.state.meta.errors.length ? (
+                <em>{field.state.meta.errors.join(', ')}</em>
+              ) : null}
+            </div>
+          )}
+        />
+
+        <form.Field
+          name="date"
+          validators={{
+            onChange: createExpenseSchema.shape.date,
+          }}
+          children={(field) => (
+            <div className="self-center">
+              <Calendar
+                mode="single"
+                selected={new Date(field.state.value)}
+                onSelect={(date) =>
+                  field.handleChange((date ?? new Date()).toLocaleDateString())
+                }
+                className="rounded-md border"
               />
               {field.state.meta.isTouched && field.state.meta.errors.length ? (
                 <em>{field.state.meta.errors.join(', ')}</em>
