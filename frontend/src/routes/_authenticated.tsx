@@ -1,10 +1,18 @@
+import { Button } from '@/components/ui/button';
 import { userQueryOptions } from '@/lib/api';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 
 const Login = () => {
   return (
-    <div>
-      You have to login <a href="/api/login">Login!</a>
+    <div className="flex flex-col gap-2 items-center">
+      <p>You have to login or register</p>
+      <Button asChild>
+        <a href="/api/login">Login!</a>
+      </Button>
+
+      <Button asChild>
+        <a href="/api/register">Register!</a>
+      </Button>
     </div>
   );
 };
@@ -28,6 +36,7 @@ export const Route = createFileRoute('/_authenticated')({
 
       return data;
     } catch (err) {
+      console.error(err);
       return { user: null };
     }
   },
