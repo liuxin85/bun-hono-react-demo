@@ -7,11 +7,11 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { routeTree } from './routeTree.gen';
 import './index.css';
 
-// Create a new router instance
-const router = createRouter({ routeTree });
-
 // Create a client
 const queryClient = new QueryClient();
+
+// Create a new router instance
+const router = createRouter({ routeTree, context: { queryClient } });
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
