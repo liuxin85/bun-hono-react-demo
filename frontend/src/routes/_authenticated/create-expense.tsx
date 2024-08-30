@@ -3,7 +3,9 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useForm } from '@tanstack/react-form';
+import { zodValidator } from '@tanstack/zod-form-adapter';
 import { api } from '@/lib/api';
+import { createExpenseSchema } from '@server/sharedTypes';
 
 export const Route = createFileRoute('/_authenticated/create-expense')({
   component: CreateExpense,
@@ -13,6 +15,8 @@ function CreateExpense() {
   const navigate = useNavigate();
 
   const form = useForm({
+    // validator here
+    validatorAdapter: zodValidator(),
     defaultValues: {
       title: '',
       amount: '0',
@@ -32,7 +36,7 @@ function CreateExpense() {
     <div className="p-2">
       <h2>Create Expense</h2>
       <form
-        className="max-w-3xl m-auto"
+        className="flex flex-col gap-y-4 max-w-3xl m-auto"
         onSubmit={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -41,9 +45,12 @@ function CreateExpense() {
       >
         <form.Field
           name="title"
+          validators={{
+            onChange: createExpenseSchema.shape.title,
+          }}
           children={(field) => {
             return (
-              <>
+              <div>
                 <Label htmlFor={field.name}>Title</Label>
                 <Input
                   type="text"
@@ -57,15 +64,18 @@ function CreateExpense() {
                 field.state.meta.errors.length ? (
                   <em>{field.state.meta.errors.join(', ')}</em>
                 ) : null}
-              </>
+              </div>
             );
           }}
         />
 
         <form.Field
           name="amount"
+          validators={{
+            onChange: createExpenseSchema.shape.amount,
+          }}
           children={(field) => (
-            <>
+            <div>
               <Label htmlFor={field.name}>Amount</Label>
               <Input
                 type="number"
@@ -77,7 +87,7 @@ function CreateExpense() {
               {field.state.meta.isTouched && field.state.meta.errors.length ? (
                 <em>{field.state.meta.errors.join(', ')}</em>
               ) : null}
-            </>
+            </div>
           )}
         />
 
